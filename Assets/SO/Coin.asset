@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Coin
   m_EditorClassIdentifier: 
   SpawnMesh:
-  - {fileID: -5076798556035486163, guid: fabe65aaffc70a945a99e7c0b3f80c88, type: 3}
-  - {fileID: -5076798556035486163, guid: fabe65aaffc70a945a99e7c0b3f80c88, type: 3}
-  - {fileID: -5076798556035486163, guid: fabe65aaffc70a945a99e7c0b3f80c88, type: 3}
+  - {fileID: -127844609115117539, guid: f48a1b3e05cf7d94f9ec9b272c050643, type: 3}
+  - {fileID: -127844609115117539, guid: f48a1b3e05cf7d94f9ec9b272c050643, type: 3}
+  - {fileID: -127844609115117539, guid: f48a1b3e05cf7d94f9ec9b272c050643, type: 3}
   SpawnMeshMaterial: {fileID: 2100000, guid: bc419a525170555439ecbacf5048e656, type: 2}
   DensityMap: {fileID: 2800000, guid: a92e9a0aee2fc5a45996b3dc7e0bc70d, type: 3}
-  SquaredInstancePerTile: 2
+  SquaredInstancePerTile: 1
   SquaredChunksPerCluster: 4
   SquaredTilePerClump: 8
   OccludeeBoundScaleMultiplier: 1

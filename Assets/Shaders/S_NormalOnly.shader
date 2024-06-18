@@ -47,7 +47,7 @@ Shader "Utility/S_NormalOnly"
             {
                 Interpolator o;
                 o.positionCS = mul(UNITY_MATRIX_MVP, float4(i.positionOS, 1));
-                o.normalWS = mul(UNITY_MATRIX_M, float4 (i.normalOS, 0));
+                o.normalWS = mul(UNITY_MATRIX_M, float4 (i.normalOS, 0)).xyz;
                 o.tangentWS = mul(UNITY_MATRIX_M, i.tangentOS);
                 o.uv = i.uv;
 
@@ -58,7 +58,7 @@ Shader "Utility/S_NormalOnly"
             {
       
                 float3 normalWS = normalize(i.normalWS);
-                float3 tangentWS = normalize(i.tangentWS);
+                float3 tangentWS = normalize(i.tangentWS).xyz;
                 float3 bitangentWS = cross(normalWS, tangentWS);
                 float3 normalTS = UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal, sampler_Normal, i.uv), -1);
 
@@ -70,7 +70,7 @@ Shader "Utility/S_NormalOnly"
 
                 float NdotL = dot(GetMainLight().direction, normalWS);
 
-                float3 albedo = SAMPLE_TEXTURE2D(_Albedo, sampler_Albedo, i.uv);
+                float3 albedo = SAMPLE_TEXTURE2D(_Albedo, sampler_Albedo, i.uv).xyz;
                 float4 ARMA = SAMPLE_TEXTURE2D(_ARMA, sampler_ARMA, i.uv);
                 return ARMA;
 
