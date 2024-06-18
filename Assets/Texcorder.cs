@@ -21,23 +21,21 @@ public class Texcorder : MonoBehaviour
     void SequenceCapture(Vector3 center, float radius, int segments) 
     {
         float inc = 2 * Mathf.PI / segments;
-        Vector3 initialPos = Cam.transform.position;
-        Vector3 initialEuler = Cam.transform.eulerAngles;
+
+        Vector3 initialEuler = ObjectToCapture.transform.eulerAngles;
 
         for (int i = 0; i < segments; i++) 
         {
             float theta = i * inc;
-            float x = Mathf.Cos(theta) * radius;
-            float y = Mathf.Sin(theta) * radius;
-            Cam.transform.position = center + new Vector3(x, Cam.transform.position.y, y);
-            Cam.transform.LookAt(center);
+            Vector3 euler = ObjectToCapture.transform.eulerAngles;
+            ObjectToCapture.transform.eulerAngles = new Vector3(euler.x, euler.y + theta * Mathf.Rad2Deg, euler.z);
             RenderContent();
         }
 
         SaveTexture(CombineTextures(_captureResults.ToArray()), "CaptureData", Name);
         _captureResults.Clear();
-        Cam.transform.position = initialPos;
-        Cam.transform.eulerAngles = initialEuler;
+        ObjectToCapture.transform.eulerAngles = initialEuler;
+
     }
     void RenderContent() 
     {
