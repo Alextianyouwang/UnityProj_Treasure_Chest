@@ -1,7 +1,8 @@
-Shader "Utility/S_NormalOnly"
+Shader "Utility/S_DataCapture"
 {
     Properties
     {
+         [KeywordEnum(Normal, Albedo, Mask)] _Display("DisplayMode", Float) = 0
         _Normal("Normal", 2D) = "bump"{}
         _Albedo("Albedo", 2D) = "Black"{}
         _ARMA("ARMA", 2D) = "black"{}
@@ -11,14 +12,14 @@ Shader "Utility/S_NormalOnly"
              Tags {"RenderType" = "Opaque""RenderPipeline" = "UniversalRenderPipeline"}
       Pass
         {
-            Name "NormalOnly"
+            Name "DataCapture"
             Cull back
             ZWrite On
             HLSLPROGRAM
             #pragma target 2.0
             #pragma vertex vert
             #pragma fragment frag
-            
+            #pragma shader_feature _DISPLAY_NORMAL _DISPLAY_ALBEDO _DISPLAY_MASK
 
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
@@ -72,10 +73,20 @@ Shader "Utility/S_NormalOnly"
 
                 float3 albedo = SAMPLE_TEXTURE2D(_Albedo, sampler_Albedo, i.uv).xyz;
                 float4 ARMA = SAMPLE_TEXTURE2D(_ARMA, sampler_ARMA, i.uv);
-                return ARMA;
 
-                return float4 (albedo,1);
-                return float4 ((normalWS + 1)* 0.5,1);
+#if _DISPLAY_NORMAL
+                return float4 ((normalWS + 1) * 0.5, 1);
+#elif _DISPLAY_ALBEDO
+                return float4 (albedo, 1);
+#elif _DISPLAY_MASK
+                return ARMA;
+#else 
+                return 0;
+#endif
+
+
+
+  
             }
             ENDHLSL
         }
