@@ -6,6 +6,7 @@
 #include "../INCLUDE/HL_GraphicsHelper.hlsl"
 #include "../INCLUDE/HL_Noise.hlsl"
 #include "../INCLUDE/HL_ShadowHelper.hlsl"
+#include "../INCLUDE/HL_Quaternion.hlsl"
 
 struct VertexInput
 {
@@ -50,13 +51,14 @@ float _ClusterBotLeftX, _ClusterBotLeftY, _TileSize;
 
 TEXTURE2D( _MainTex);SAMPLER (sampler_MainTex);float4 _MainTex_ST;
 TEXTURE2D( _Normal);SAMPLER (sampler_Normal);float4 _Normal_ST;
+TEXTURE2D( _Mask);SAMPLER (sampler_Mask);float4 _Mask_ST;
+
 float _MasterScale;
 
 VertexOutput vert(VertexInput v, uint instanceID : SV_INSTANCEID)
 {
     VertexOutput o;
     
-
     ////////////////////////////////////////////////
     // Fetch Input
     float3 spawnPosWS = _SpawnBuffer[instanceID].positionWS;
@@ -65,15 +67,36 @@ VertexOutput vert(VertexInput v, uint instanceID : SV_INSTANCEID)
     int y = (spawnPosWS.z - _ClusterBotLeftY) / _TileSize;
     // Sample Buffers Based on xy
     float3 groundNormalWS = _GroundNormalBuffer[x * _NumTilePerClusterSide + y];
+    float rand = _SpawnBuffer[instanceID].hash * 2 - 1; // [-1,1]
  
     float3 posOS = v.positionOS;
     float viewDist = length(_WorldSpaceCameraPos - spawnPosWS);
      ////////////////////////////////////////////////
    
     // Apply Transform
+
+    float xRot = 15;
+    float zRot = 15;
     float3 posWS = spawnPosWS + posOS * _MasterScale ;
+    
+
+
     float3 normalWS = v.normalOS;
     float4 tangentWS = v.tangentOS;
+    
+    AlignToGroundNormal(groundNormalWS,spawnPosWS, posWS, normalWS, tangentWS.xyz);
+    
+    posWS = RotateAroundAxis(float4(posWS, 1), float3(1, 0, 0), rand * xRot, spawnPosWS).xyz;
+    posWS = RotateAroundAxis(float4(posWS, 1), float3(0, 0, 1), rand * zRot, spawnPosWS).xyz;
+    
+    normalWS = RotateAroundXInDegrees(float4(normalWS, 0),  rand * xRot).xyz;
+    normalWS = RotateAroundYInDegrees(float4(normalWS, 0), rand * zRot).xyz;
+    
+    tangentWS.xyz = RotateAroundXInDegrees(float4(tangentWS.xyz, 0),  rand * xRot).xyz;
+    tangentWS.xyz = RotateAroundYInDegrees(float4(tangentWS.xyz, 0), rand * zRot).xyz;
+    
+    
+    
     
     ////////////////////////////////////////////////
     
@@ -148,7 +171,7 @@ float4 frag(VertexOutput v, bool frontFace : SV_IsFrontFace) : SV_Target
     float3 normalWS = normalize(v.normalWS);
     float3 tangentWS = normalize(v.tangentWS);
     float3 bitangentWS = cross(normalWS, tangentWS);
-    float3 normalTS = UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal, sampler_Normal, v.uv), -1 );
+    float3 normalTS = UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal, sampler_Normal, v.uv), 1 );
   
 
     float sgn =v.tangentWS.w; // should be either +1 or -1
@@ -159,25 +182,15 @@ float4 frag(VertexOutput v, bool frontFace : SV_IsFrontFace) : SV_Target
     float3 posNDS = v.positionCS / v.positionCS.w;
     float2 uvSS = posNDS.xy / 2 + 0.5;
     
-    //CustomInputData d = (CustomInputData) 0;
-    //d.normalWS = normalize(normalWS);
-    //d.groundNormalWS = normalize(v.groundNormalWS);
-    //d.positionWS = v.positionWS;
-    //d.shadowCoord = CalculateShadowCoord(v.positionWS, v.positionCS);
-    //d.viewDir = normalize(_WorldSpaceCameraPos - v.positionWS);
-    //d.viewDist = length(_WorldSpaceCameraPos - v.positionWS);
-    //d.smoothness = exp2(_SpecularTightness * 10 + 1);
-    //d.sss = _SSSColor;
-    //d.sssTightness = exp2(_SSSTightness * 10 + 1);
-    //d.albedo = 0;
-    //d.specularColor = _SpecularColor.xyz;
-    //d.bakedGI = v.bakedGI;
+    
+    float4 MADS = SAMPLE_TEXTURE2D(_Mask, sampler_Mask, v.uv);
+
     
     InputData data = (InputData) 0;
     
     data.positionWS = v.positionWS;
     data.positionCS = v.positionCS;
-    data.normalWS = lerp(normalWS,v.groundNormalWS,0.5);
+    data.normalWS = normalWS;
     data.viewDirectionWS = normalize(_WorldSpaceCameraPos - v.positionWS);
     data.shadowCoord = CalculateShadowCoord(v.positionWS, v.positionCS);
     data.fogCoord = 0;
@@ -192,11 +205,11 @@ float4 frag(VertexOutput v, bool frontFace : SV_IsFrontFace) : SV_Target
     
     surf.albedo = albedo.xyz;
     surf.specular = 1;
-    surf.metallic = 0;
-    surf.smoothness = 0.1;
+    surf.metallic = MADS.x;
+    surf.smoothness =MADS.w;
     surf.normalTS = normalTS;
     surf.emission = 0;
-    surf.occlusion = 1;
+    surf.occlusion = MADS.y;
     surf.alpha = albedo.w;
     surf.clearCoatMask = 0;
     surf.clearCoatSmoothness = 0;

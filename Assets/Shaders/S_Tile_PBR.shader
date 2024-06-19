@@ -3,8 +3,9 @@ Shader "Procedural/S_Tile_PBR"
     Properties
     {
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
-
         _Normal("Normal", 2D) = "bump" {}
+        _Mask("Mask", 2D) = "black"{}
+
         _MasterScale("MasterScale",Range(0,1)) = 1
     }
     SubShader
@@ -23,7 +24,8 @@ Shader "Procedural/S_Tile_PBR"
             #pragma fragment frag
 
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
-            #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
+           // #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
             #pragma multi_compile _ _SHADOWS_SOFT
 
 

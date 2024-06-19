@@ -178,4 +178,61 @@ void FastSSS_float(float3 ViewDir, float3 LightDir, float3 WorldNormal, float3 L
     sss = saturate(pow(saturate(dot(-LAddN, -LAddN * Flood + ViewDir)), Power)) * LightColor;
     
 }
+// Function to create a rotation matrix that aligns the world up vector with the given ground normal
+float3x3 CreateAlignmentMatrix(float3 groundNormal)
+{
+    // World up vector
+    float3 up = float3(0, 1, 0);
+    
+    // If the ground normal is nearly equal to the up vector, no rotation is needed
+    if (abs(dot(up, groundNormal)) > 0.999f)
+    {
+        return float3x3(1.0, 0.0, 0.0,
+                        0.0, 1.0, 0.0,
+                        0.0, 0.0, 1.0);
+    }
+
+    // Calculate the axis of rotation (cross product)
+    float3 axis = normalize(cross(up, groundNormal));
+
+    // Calculate the angle between the up vector and the ground normal
+    float angle = acos(dot(up, groundNormal));
+
+    // Compute the components of the rotation matrix using axis-angle representation
+    float cosAngle = cos(angle);
+    float sinAngle = sin(angle);
+    float oneMinusCos = 1.0 - cosAngle;
+
+    float3x3 rotationMatrix = float3x3(
+        cosAngle + axis.x * axis.x * oneMinusCos,
+        axis.x * axis.y * oneMinusCos - axis.z * sinAngle,
+        axis.x * axis.z * oneMinusCos + axis.y * sinAngle,
+
+        axis.y * axis.x * oneMinusCos + axis.z * sinAngle,
+        cosAngle + axis.y * axis.y * oneMinusCos,
+        axis.y * axis.z * oneMinusCos - axis.x * sinAngle,
+
+        axis.z * axis.x * oneMinusCos - axis.y * sinAngle,
+        axis.z * axis.y * oneMinusCos + axis.x * sinAngle,
+        cosAngle + axis.z * axis.z * oneMinusCos
+    );
+
+    return rotationMatrix;
+}
+
+// Function to align an object's position, normal, and tangent to the ground normal
+void AlignToGroundNormal(float3 groundNormal, float3 pivot, inout float3 position, inout float3 normal, inout float3 tangent)
+{
+    // Create the alignment matrix
+    float3x3 alignmentMatrix = CreateAlignmentMatrix(groundNormal);
+
+    // Rotate the position around the pivot
+    float3 relativePosition = position - pivot;
+    relativePosition = mul(alignmentMatrix, relativePosition);
+    position = relativePosition + pivot;
+
+    // Apply the alignment matrix to the normal and tangent
+    normal = mul(alignmentMatrix, normal);
+    tangent = mul(alignmentMatrix, tangent);
+}
 #endif
