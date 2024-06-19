@@ -3,6 +3,9 @@ Shader "Custom/S_VertFrac"
     Properties
     {
       [HDR] _Tint("Tint", Color) = (1,1,1,1)
+              _MaskCenter("MaskCenter", Vector) = (0,0,0,0)
+        _MaskRadius("MaskRadius", Float) = 0
+        _MaskFalloff("MaskFalloff", Float) = 0
     }
         SubShader
     {
@@ -26,6 +29,16 @@ Shader "Custom/S_VertFrac"
 
 
         float4 _Tint;
+    float3 _MaskCenter;
+    float _MaskRadius;
+    float _MaskFalloff;
+    float SphereMask(float3 center, float radius, float falloff, float3 position)
+    {
+        float mask0 = smoothstep(radius - falloff, radius, distance(position, center));
+        float mask1 = smoothstep(radius, radius + falloff, distance(position, center));
+        return mask0;
+
+    }
             struct Input 
             {
                 float3 positionOS : POSITION;
@@ -76,10 +89,10 @@ Shader "Custom/S_VertFrac"
                     amp *= 0.95;
                     speed *= -0.8;
                 }
-                
+                float mask = 1 - SphereMask(_MaskCenter, _MaskRadius, _MaskFalloff, posWS);
 
                 float4 finalColor = _Tint;
-                finalColor.a *= stripe * pow( (1 - uv.y),4);
+                finalColor.a *= stripe * pow( (1 - uv.y),4) * mask;
                 //return float4 (uv, 0, 1);
                 return finalColor;
 

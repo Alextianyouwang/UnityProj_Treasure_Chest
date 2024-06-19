@@ -6,6 +6,9 @@ Shader "Custom/S_VertFrac"
         _Normal("Normal", 2D) = "bump"{}
         _Albedo("Albedo", 2D) = "Black"{}
         _Roughness("ARMA", 2D) = "White"{}
+        _MaskCenter("MaskCenter", Vector) = (0,0,0,0)
+        _MaskRadius ("MaskRadius", Float) = 0
+        _MaskFalloff("MaskFalloff", Float) = 0
     }
         SubShader
     {
@@ -34,7 +37,16 @@ Shader "Custom/S_VertFrac"
             TEXTURE2D(_Normal); SAMPLER(sampler_Normal);
             TEXTURE2D(_Albedo); SAMPLER(sampler_Albedo);
             TEXTURE2D(_Roughness); SAMPLER(sampler_Roughness);
+            float3 _MaskCenter;
+            float _MaskRadius;
+            float _MaskFalloff;
+            float SphereMask(float3 center, float radius, float falloff, float3 position)
+            {
+                float mask0 = smoothstep(radius - falloff, radius, distance(position, center));
+                float mask1 = smoothstep(radius, radius + falloff, distance(position, center));
+                return mask0;
 
+            }
             struct Input 
             {
                 float3 positionOS : POSITION;
@@ -60,7 +72,8 @@ Shader "Custom/S_VertFrac"
 
                 float3 objectWorldPosition = unity_ObjectToWorld._m03_m13_m23;
                 float3 noise = rand3dTo3d(objectWorldPosition) - 0.5;
-                positionWS += noise;
+                float mask = 1- SphereMask(_MaskCenter, _MaskRadius, _MaskFalloff, objectWorldPosition);
+                positionWS += noise * mask;
 
                 o.positionWS = positionWS;
                 o.positionCS = mul(UNITY_MATRIX_VP, float4(positionWS, 1));

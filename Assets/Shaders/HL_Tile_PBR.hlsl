@@ -84,6 +84,10 @@ VertexOutput vert(VertexInput v, uint instanceID : SV_INSTANCEID)
     float3 normalWS = v.normalOS;
     float4 tangentWS = v.tangentOS;
     
+    posWS = RotateAroundAxis(float4(posWS, 1), float3(0, 1, 0), rand * 360, spawnPosWS).xyz;
+    normalWS = RotateAroundAxis(float4(normalWS, 0), float3(0, 1, 0), rand * 360).xyz;
+    tangentWS.xyz = RotateAroundAxis(float4(tangentWS.xyz, 0), float3(0, 1, 0), rand * 360).xyz;
+    
     AlignToGroundNormal(groundNormalWS,spawnPosWS, posWS, normalWS, tangentWS.xyz);
     
     posWS = RotateAroundAxis(float4(posWS, 1), float3(1, 0, 0), rand * xRot, spawnPosWS).xyz;
@@ -169,7 +173,7 @@ float4 frag(VertexOutput v, bool frontFace : SV_IsFrontFace) : SV_Target
     float4 albedo = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, v.uv);
 
     float3 normalWS = normalize(v.normalWS);
-    float3 tangentWS = normalize(v.tangentWS);
+    float3 tangentWS = normalize(v.tangentWS.xyz);
     float3 bitangentWS = cross(normalWS, tangentWS);
     float3 normalTS = UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal, sampler_Normal, v.uv), 1 );
   
