@@ -23,11 +23,11 @@ public class Texcorder : MonoBehaviour
         float inc = 2 * Mathf.PI / segments;
 
         Vector3 initialEuler = ObjectToCapture.transform.eulerAngles;
-
+        Vector3 euler = ObjectToCapture.transform.eulerAngles;
         for (int i = 0; i < segments; i++) 
         {
             float theta = i * inc;
-            Vector3 euler = ObjectToCapture.transform.eulerAngles;
+
             ObjectToCapture.transform.eulerAngles = new Vector3(euler.x, euler.y + theta * Mathf.Rad2Deg, euler.z);
             RenderContent();
         }

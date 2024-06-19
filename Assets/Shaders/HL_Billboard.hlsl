@@ -35,7 +35,7 @@ Interpolator vert(Input i)
 #ifdef SHADOW_CASTER_PASS
         o.positionCS = CalculatePositionCSWithShadowCasterLogic( o.positionWS , float3 (0,0,1));
 #else
-    o.positionCS = mul(UNITY_MATRIX_MVP, float4(i.positionOS, 1));
+        o.positionCS = mul(UNITY_MATRIX_MVP, float4(i.positionOS, 1));
 #endif
     return o;
 }
@@ -53,17 +53,9 @@ float4 frag(Interpolator i) : SV_Target
     float4 MADS = SAMPLE_TEXTURE2D(_ARMA, sampler_ARMA, i.uv);
         
 
-
-
-    float3 objectWorldPosition = unity_ObjectToWorld._m03_m13_m23;
-    float3 camDirection = UNITY_MATRIX_IT_MV[2].xyz;
     float3 normalOS = SAMPLE_TEXTURE2D(_Normal, sampler_Normal, i.uv).xyz * 2 - 1;
-    float4 fromToRot = from_to_rotation(float3(0, 0, 1), camDirection);
-    normalOS = -rotate_vector(normalOS, fromToRot);
-    float3 posNDS = i.positionCS / i.positionCS.w;
-    float2 uvSS = posNDS.xy / 2 + 0.5;
+    normalOS = -mul(UNITY_MATRIX_V, float4(normalOS, 0));
 
-     
 
     InputData data = (InputData) 0;
 
@@ -74,7 +66,6 @@ float4 frag(Interpolator i) : SV_Target
     data.shadowCoord = CalculateShadowCoord(i.positionWS, i.positionCS);
 
     SurfaceData surf = (SurfaceData) 0;
-
 
     surf.albedo = albedo.xyz;
     surf.metallic = MADS.x;

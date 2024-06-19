@@ -518,7 +518,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Cam: {fileID: 1317775027}
   ObjectToCapture: {fileID: 133107867}
-  Name: Mask_Atlas
+  Name: Albedo_Atlas
 --- !u!114 &1317775025
 MonoBehaviour:
   m_ObjectHideFlags: 0
