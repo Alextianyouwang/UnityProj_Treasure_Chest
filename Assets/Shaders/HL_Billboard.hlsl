@@ -54,7 +54,8 @@ float4 frag(Interpolator i) : SV_Target
         
 
     float3 normalOS = SAMPLE_TEXTURE2D(_Normal, sampler_Normal, i.uv).xyz * 2 - 1;
-    normalOS = -mul(UNITY_MATRIX_V, float4(normalOS, 0));
+    normalOS = mul(UNITY_MATRIX_V, float4(normalOS, 0));
+    normalOS.z = -normalOS.z;
 
 
     InputData data = (InputData) 0;
@@ -74,6 +75,7 @@ float4 frag(Interpolator i) : SV_Target
     surf.alpha = albedo.w;
 
     float4 finalColor = UniversalFragmentPBR(data, surf);
+
     return finalColor;
     
     #endif
