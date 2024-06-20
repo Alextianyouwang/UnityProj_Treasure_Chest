@@ -7,6 +7,11 @@ public class ParameterControl : MonoBehaviour
     public float MaskRadius;
     public float MaskFalloff;
 
+    [Range(0f, 1f)]
+    public float CrackAmount;
+
+    [Range(0f, 1f)]
+    public float IntensityAmount;
     private void Update()
     {
         if (MaskCenter == null)
@@ -21,6 +26,8 @@ public class ParameterControl : MonoBehaviour
             m.SetVector("_MaskCenter", MaskCenter.transform.position);
             m.SetFloat("_MaskRadius", MaskRadius);
             m.SetFloat("_MaskFalloff", MaskFalloff);
+            m.SetFloat("_IntensityMultiplier", IntensityAmount);
+            m.SetFloat("_CrackMultiplier", CrackAmount);
         }
     }
 }

@@ -7,8 +7,9 @@ Shader "Custom/S_VertFrac"
         _Albedo("Albedo", 2D) = "Black"{}
         _Roughness("ARMA", 2D) = "White"{}
         _MaskCenter("MaskCenter", Vector) = (0,0,0,0)
-        _MaskRadius ("MaskRadius", Float) = 0
+        _MaskRadius("MaskRadius", Float) = 0
         _MaskFalloff("MaskFalloff", Float) = 0
+        _CrackMultiplier("CrackMultiplier",Range (0,1)) = 0
     }
         SubShader
     {
@@ -40,6 +41,7 @@ Shader "Custom/S_VertFrac"
             float3 _MaskCenter;
             float _MaskRadius;
             float _MaskFalloff;
+            float  _CrackMultiplier;
             float SphereMask(float3 center, float radius, float falloff, float3 position)
             {
                 float mask0 = smoothstep(radius - falloff, radius, distance(position, center));
@@ -71,7 +73,7 @@ Shader "Custom/S_VertFrac"
                 float3 positionWS = mul(UNITY_MATRIX_M, float4(i.positionOS, 1));
 
                 float3 objectWorldPosition = unity_ObjectToWorld._m03_m13_m23;
-                float3 noise = rand3dTo3d(objectWorldPosition) - 0.5;
+                float3 noise = (rand3dTo3d(objectWorldPosition) - 0.5) *_CrackMultiplier;
                 float mask = 1- SphereMask(_MaskCenter, _MaskRadius, _MaskFalloff, objectWorldPosition);
                 positionWS += noise * mask;
 

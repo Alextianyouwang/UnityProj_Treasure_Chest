@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Shaft
-  m_Shader: {fileID: 4800000, guid: 3c665f5b37a42af4193f2d619d33f280, type: 3}
+  m_Name: M_ShaftUV1
+  m_Shader: {fileID: 4800000, guid: 42d849dcd55ccb541b196b94cfc7bb09, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -25,12 +25,9 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _CrackMultiplier: 0
-    - _IntendsityMultiplier: 0
-    - _IntensityMultiplier: 0
-    - _MaskFalloff: 3
+    - _MaskFalloff: 0
     - _MaskRadius: 0
     m_Colors:
-    - _MaskCenter: {r: 42.09547, g: 7.2959366, b: 40.92263, a: 0}
-    - _Tint: {r: 67.79352, g: 65.30727, b: 15.029695, a: 0.11372549}
+    - _MaskCenter: {r: 0, g: 0, b: 0, a: 0}
+    - _Tint: {r: 1, g: 0.92509395, b: 0.19339621, a: 1}
   m_BuildTextureStacks: []

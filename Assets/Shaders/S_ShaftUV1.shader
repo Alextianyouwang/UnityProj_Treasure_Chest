@@ -1,4 +1,4 @@
-Shader "Custom/S_S_Shaft"
+Shader "Custom/S_ShaftUV1"
 {
     Properties
     {
@@ -6,7 +6,6 @@ Shader "Custom/S_S_Shaft"
               _MaskCenter("MaskCenter", Vector) = (0,0,0,0)
         _MaskRadius("MaskRadius", Float) = 0
         _MaskFalloff("MaskFalloff", Float) = 0
-        _IntensityMultiplier("CrackMultiplier",Range(0,1)) = 0
     }
         SubShader
     {
@@ -23,7 +22,6 @@ Shader "Custom/S_S_Shaft"
             #pragma vertex vert
             #pragma fragment frag
 
-
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
         #include "../INCLUDE/HL_Noise.hlsl"
         #include "../INCLUDE/HL_ShadowHelper.hlsl"
@@ -33,7 +31,6 @@ Shader "Custom/S_S_Shaft"
     float3 _MaskCenter;
     float _MaskRadius;
     float _MaskFalloff;
-    float  _IntensityMultiplier;
     float SphereMask(float3 center, float radius, float falloff, float3 position)
     {
         float mask0 = smoothstep(radius - falloff, radius, distance(position, center));
@@ -47,6 +44,7 @@ Shader "Custom/S_S_Shaft"
                 float3 normalOS : NORMAL;
                 float4 tangentOS : TANGENT;
                 float2 uv : TEXCOORD0;
+                float2 uv1 : TEXCOORD1;
             };
 
             struct Interpolator 
@@ -56,6 +54,7 @@ Shader "Custom/S_S_Shaft"
                 float3 normalWS : TEXCOORD1;
                 float4 tangentWS : TEXCOORD2;
                 float3 positionWS : TEXCOORD3;
+                float2 uv1 : TEXCOORD4;
 
             };
 
@@ -71,6 +70,7 @@ Shader "Custom/S_S_Shaft"
                 o.normalWS = mul(UNITY_MATRIX_M, float4 (i.normalOS, 0)).xyz;
                 o.tangentWS = mul(UNITY_MATRIX_M, i.tangentOS);
                 o.uv = i.uv;
+                o.uv1 = i.uv1;
 
                 return o;
             }
@@ -78,24 +78,11 @@ Shader "Custom/S_S_Shaft"
             float4 frag(Interpolator i) : SV_Target
             {
                 float2 uv = i.uv;
+                float2 uv1 = i.uv1;
                 float3 posWS = i.positionWS;
-                float stripe = 0; 
-                float freq = 10;
-                float amp = 1;
-                float speed = 1;
-                [unroll]
-                for (int i = 0; i < 4; i++) 
-                {
-                    stripe += smoothstep(0.5, 1, (perlinNoise(uv.x * freq + _Time.y * speed, 12.9898) + 1) * 0.5 * amp);
-                    freq *= 2;
-                    amp *= 0.95;
-                    speed *= -0.8;
-                }
-                float mask = 1 - SphereMask(_MaskCenter, _MaskRadius, _MaskFalloff, posWS);
-
+   
                 float4 finalColor = _Tint;
-                finalColor.a *= stripe * pow( (1 - uv.y),4) * mask * _IntensityMultiplier;
-                //return float4 (uv, 0, 1);
+                finalColor.a *= pow( uv1.x,4);
                 return finalColor;
 
             }
