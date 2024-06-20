@@ -84,7 +84,7 @@ Shader "Custom/S_S_Shaft"
                 float amp = 1;
                 float speed = 1;
                 [unroll]
-                for (int i = 0; i < 4; i++) 
+                for (int i = 0; i < 10; i++) 
                 {
                     stripe += smoothstep(0.5, 1, (perlinNoise(uv.x * freq + _Time.y * speed, 12.9898) + 1) * 0.5 * amp);
                     freq *= 2;

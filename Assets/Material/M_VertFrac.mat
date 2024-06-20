@@ -41,9 +41,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _CrackMultiplier: 0
-    - _MaskFalloff: 3
-    - _MaskRadius: 0
+    - _CrackMultiplier: 0.115
+    - _MaskFalloff: 5.28
+    - _MaskRadius: 24
     m_Colors:
-    - _MaskCenter: {r: 42.09547, g: 7.2959366, b: 40.92263, a: 0}
+    - _MaskCenter: {r: 39.5, g: 4.4, b: 38.17, a: 0}
   m_BuildTextureStacks: []

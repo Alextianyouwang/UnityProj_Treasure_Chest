@@ -19,13 +19,20 @@ public class CoinFiller : MonoBehaviour
     IEnumerator FillCoin() 
     {
         int amount = 0;
+
+        for (int i = 0; i < 100; i++)
+        {
+            GameObject newCoin = Instantiate(Coin_prefab);
+            newCoin.transform.position = SpawnPoint.position;
+            _coinList.Add(newCoin);
+        }
         while (amount < _totalAmount) 
         {
+            GameObject newCoin = Instantiate(Coin_prefab);
+            newCoin.transform.position = SpawnPoint.position;
+            _coinList.Add(newCoin);
 
-                GameObject newCoin = Instantiate(Coin_prefab);
-                newCoin.transform.position = SpawnPoint.position;
-                _coinList.Add(newCoin);
-                amount++;
+            amount += 1;
             yield return null;
       
         }

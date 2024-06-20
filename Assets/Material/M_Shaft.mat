@@ -25,12 +25,12 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _CrackMultiplier: 0
+    - _CrackMultiplier: 0.115
     - _IntendsityMultiplier: 0
-    - _IntensityMultiplier: 0
-    - _MaskFalloff: 3
-    - _MaskRadius: 0
+    - _IntensityMultiplier: 1
+    - _MaskFalloff: 5.28
+    - _MaskRadius: 24
     m_Colors:
-    - _MaskCenter: {r: 42.09547, g: 7.2959366, b: 40.92263, a: 0}
-    - _Tint: {r: 67.79352, g: 65.30727, b: 15.029695, a: 0.11372549}
+    - _MaskCenter: {r: 39.5, g: 4.4, b: 38.17, a: 0}
+    - _Tint: {r: 97.06628, g: 77.12444, b: 16.025091, a: 0.11372549}
   m_BuildTextureStacks: []

@@ -6,6 +6,7 @@ Shader "Custom/S_ShaftUV1"
               _MaskCenter("MaskCenter", Vector) = (0,0,0,0)
         _MaskRadius("MaskRadius", Float) = 0
         _MaskFalloff("MaskFalloff", Float) = 0
+        _IntensityMultiplier("CrackMultiplier",Range(0,1)) = 0
     }
         SubShader
     {
@@ -31,6 +32,7 @@ Shader "Custom/S_ShaftUV1"
     float3 _MaskCenter;
     float _MaskRadius;
     float _MaskFalloff;
+    float _IntensityMultiplier;
     float SphereMask(float3 center, float radius, float falloff, float3 position)
     {
         float mask0 = smoothstep(radius - falloff, radius, distance(position, center));
@@ -82,7 +84,7 @@ Shader "Custom/S_ShaftUV1"
                 float3 posWS = i.positionWS;
    
                 float4 finalColor = _Tint;
-                finalColor.a *= pow( uv1.x,4);
+                finalColor.a *= pow( uv1.x,4) * _IntensityMultiplier;
                 return finalColor;
 
             }
