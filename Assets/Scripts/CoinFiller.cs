@@ -4,17 +4,14 @@ using UnityEngine;
 
 public class CoinFiller : MonoBehaviour
 {
-    private int _totalAmount = 1000;
+    private int _totalAmount = 300;
     public GameObject Coin_prefab;
     private List<GameObject> _coinList = new List<GameObject>();
     public Transform SpawnPoint;
 
-    private void Update()
+    public void StartFillCoin() 
     {
-        if (Input.GetKeyDown(KeyCode.Space)) 
-        {
-            StartCoroutine(FillCoin());
-        }
+        StartCoroutine(FillCoin());
     }
     IEnumerator FillCoin() 
     {
@@ -22,19 +19,22 @@ public class CoinFiller : MonoBehaviour
 
         for (int i = 0; i < 100; i++)
         {
-            GameObject newCoin = Instantiate(Coin_prefab);
-            newCoin.transform.position = SpawnPoint.position;
+            GameObject newCoin = Instantiate(Coin_prefab, SpawnPoint.position + new Vector3 (Random.Range (-1f,1f), 0, Random.Range(-1f,1f)), Quaternion.identity);
             _coinList.Add(newCoin);
         }
         while (amount < _totalAmount) 
         {
-            GameObject newCoin = Instantiate(Coin_prefab);
-            newCoin.transform.position = SpawnPoint.position;
+            GameObject newCoin = Instantiate(Coin_prefab, SpawnPoint.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)), Quaternion.identity);
             _coinList.Add(newCoin);
 
             amount += 1;
             yield return null;
       
+        }
+        for (int i = 0; i < 100; i++)
+        {
+            GameObject newCoin = Instantiate(Coin_prefab, SpawnPoint.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)), Quaternion.identity);
+            _coinList.Add(newCoin);
         }
     }
 }

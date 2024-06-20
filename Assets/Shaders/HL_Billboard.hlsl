@@ -15,6 +15,7 @@ struct Input
     float3 positionOS : POSITION;
     
     float2 uv : TEXCOORD0;
+    
 };
 
 struct Interpolator
@@ -58,6 +59,9 @@ float4 frag(Interpolator i) : SV_Target
     normalOS.z = -normalOS.z;
 
 
+    float3 vertexSH;
+    OUTPUT_SH(normalOS, vertexSH);
+    
     InputData data = (InputData) 0;
 
     data.positionWS = i.positionWS;
