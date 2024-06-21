@@ -55,8 +55,8 @@ float4 frag(Interpolator i) : SV_Target
         
 
     float3 normalOS = SAMPLE_TEXTURE2D(_Normal, sampler_Normal, i.uv).xyz * 2 - 1;
-    normalOS = mul(UNITY_MATRIX_V, float4(normalOS, 0));
-    normalOS.z = -normalOS.z;
+    normalOS = -mul(UNITY_MATRIX_V, float4(normalOS, 0));
+    normalOS.y = -normalOS.y;
 
 
     float3 vertexSH;
