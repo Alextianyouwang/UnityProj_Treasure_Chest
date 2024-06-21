@@ -19,7 +19,7 @@ public class FractureManager : MonoBehaviour
         foreach (Rigidbody rb in childs) 
         {
             Vector3 direction = ( rb.position - averagePos).normalized;
-            rb.AddForce(direction * 30, ForceMode.Impulse);
+            rb.AddForce(direction * 40, ForceMode.Impulse);
         }
     }
 }

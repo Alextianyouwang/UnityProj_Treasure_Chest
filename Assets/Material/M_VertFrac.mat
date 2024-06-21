@@ -45,5 +45,5 @@ Material:
     - _MaskFalloff: 5.28
     - _MaskRadius: 15
     m_Colors:
-    - _MaskCenter: {r: 40.98139, g: 3.9099965, b: 39.011074, a: 0}
+    - _MaskCenter: {r: 41.199997, g: 3.9099963, b: 39.1, a: 0}
   m_BuildTextureStacks: []
