@@ -6,6 +6,9 @@ Shader "Utility/S_DataCapture"
         _Normal("Normal", 2D) = "bump"{}
         _Albedo("Albedo", 2D) = "Black"{}
         _ARMA("ARMA", 2D) = "black"{}
+
+        
+        _Blend("Blend",Range(0,1)) = 1
     }
         SubShader
     {
@@ -41,13 +44,17 @@ Shader "Utility/S_DataCapture"
                 float2 uv : TEXCOORD0;
                 float3 normalWS : TEXCOORD1;
                 float4 tangentWS : TEXCOORD2;
+                float3 positionWS : TEXCOORD3;
 
             };
+
+            float  _Blend;
 
             Interpolator vert(Input i)
             {
                 Interpolator o;
                 o.positionCS = mul(UNITY_MATRIX_MVP, float4(i.positionOS, 1));
+                o.positionWS = mul(UNITY_MATRIX_M, float4(i.positionOS, 1));
                 o.normalWS = mul(UNITY_MATRIX_M, float4 (i.normalOS, 0)).xyz;
                 o.tangentWS = mul(UNITY_MATRIX_M, i.tangentOS);
                 o.uv = i.uv;
@@ -61,20 +68,66 @@ Shader "Utility/S_DataCapture"
                 float3 normalWS = normalize(i.normalWS);
                 float3 tangentWS = normalize(i.tangentWS).xyz;
                 float3 bitangentWS = cross(normalWS, tangentWS);
-                float3 normalTS = UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal, sampler_Normal, i.uv), -1);
+                float3 normalTS = UnpackNormalScale(SAMPLE_TEXTURE2D(_Normal, sampler_Normal, i.uv), 1);
 
 
                 float sgn = i.tangentWS.w; 
                 float3 bitangent = sgn * cross(normalWS.xyz, tangentWS.xyz);
                 half3x3 tangentToWorld = half3x3(tangentWS.xyz, bitangent.xyz, normalWS.xyz);
-                normalWS = normalize( mul(normalTS, tangentToWorld));
+                float3 finalNormalWS = normalize( mul(normalTS, tangentToWorld));
+
+                normalWS = lerp(normalWS,finalNormalWS,_Blend) ;
 
                 float NdotL = dot(GetMainLight().direction, normalWS);
 
                 float3 albedo = SAMPLE_TEXTURE2D(_Albedo, sampler_Albedo, i.uv).xyz;
                 float4 ARMA = SAMPLE_TEXTURE2D(_ARMA, sampler_ARMA, i.uv);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                float3 posWS = i.positionWS;
+                float3 viewDirWS = normalize( _WorldSpaceCameraPos - posWS);
+                float3 lightDirWS =  GetMainLight().direction;
+
+
+                //return posWS.xyzz;
+                //return viewDirWS.xyzz;
+                //return lightDirWS.xyzz;
+
+ 
+                //return dot(lightDirWS, normalWS);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
 #if _DISPLAY_NORMAL
+
                 return float4 ((normalWS + 1) * 0.5, 1);
 #elif _DISPLAY_ALBEDO
                 return float4 (albedo, 1);

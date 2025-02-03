@@ -10,7 +10,7 @@ Shader "Procedural/S_Tile_PBR"
     }
     SubShader
     {
-         Tags {"RenderType" = "Opaque" "Queue" = "AlphaTest" "RenderPipeline" = "UniversalRenderPipeline"}
+         Tags {"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline"}
 
          Pass
         {
