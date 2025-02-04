@@ -2,17 +2,16 @@ Shader "Utility/S_DataCapture"
 {
     Properties
     {
-         [KeywordEnum(Normal, Albedo, Mask)] _Display("DisplayMode", Float) = 0
+         [KeywordEnum(Normal, Albedo, Mask, Depth)] _Display("DisplayMode", Float) = 0
         _Normal("Normal", 2D) = "bump"{}
         _Albedo("Albedo", 2D) = "Black"{}
         _ARMA("ARMA", 2D) = "black"{}
-
-        
         _Blend("Blend",Range(0,1)) = 1
     }
         SubShader
     {
-             Tags {"RenderType" = "Opaque""RenderPipeline" = "UniversalRenderPipeline"}
+             Tags {"RenderType" = "Opaque"
+            "RenderPipeline" = "UniversalPipeline"}
       Pass
         {
             Name "DataCapture"
@@ -22,7 +21,7 @@ Shader "Utility/S_DataCapture"
             #pragma target 2.0
             #pragma vertex vert
             #pragma fragment frag
-            #pragma shader_feature _DISPLAY_NORMAL _DISPLAY_ALBEDO _DISPLAY_MASK
+            #pragma shader_feature _DISPLAY_NORMAL _DISPLAY_ALBEDO _DISPLAY_MASK _DISPLAY_DEPTH
 
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
@@ -114,12 +113,14 @@ Shader "Utility/S_DataCapture"
 
       
 #if _DISPLAY_NORMAL
-         return float4 (normalWS, 1);
+        // return float4 (normalWS, 1);
                 return float4 ((normalWS + 1) * 0.5, 1);
 #elif _DISPLAY_ALBEDO
                 return float4 (albedo, 1);
 #elif _DISPLAY_MASK
                 return ARMA;
+#elif _DISPLAY_DEPTH
+                return float4 (distance(posWS,_WorldSpaceCameraPos) * 0.01.xxx,1);
 #else 
                 return 0;
 #endif

@@ -213,7 +213,7 @@ float4 frag(VertexOutput v, bool frontFace : SV_IsFrontFace) : SV_Target
     surf.smoothness =MADS.w;
     surf.normalTS = normalTS;
     surf.emission = 0;
-    surf.occlusion = MADS.y;
+    surf.occlusion = 0;
     surf.alpha = albedo.w;
     surf.clearCoatMask = 0;
     surf.clearCoatSmoothness = 0;

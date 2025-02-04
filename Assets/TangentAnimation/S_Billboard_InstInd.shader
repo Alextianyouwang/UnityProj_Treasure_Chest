@@ -9,7 +9,9 @@ Shader "Procedural/S_Billboard_InstInd"
     }
     SubShader
     {
-         Tags {"RenderType" = "Opaque" "Queue" = "Geometry"  "RenderPipeline" = "UniversalPipeline"}
+         Tags {"RenderType" = "Opaque" "Queue" = "Geometry"  
+
+            "RenderPipeline" = "UniversalPipeline"}
          LOD 300
          Pass
         {

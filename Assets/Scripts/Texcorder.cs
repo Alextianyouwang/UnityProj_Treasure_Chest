@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.Rendering.HableCurve;
 
 [ExecuteInEditMode]
 public class Texcorder : MonoBehaviour
@@ -18,6 +19,13 @@ public class Texcorder : MonoBehaviour
         SequenceCapture(ObjectToCapture.transform.position, 4f, 16);
     }
 
+     void Update()
+    {
+        //if (Input.GetKeyDown(KeyCode.Space)) 
+        //{
+        //   StartCoroutine(SequenceCapture(ObjectToCapture.transform.position, 4f, 16,0.15f))  ;
+        //}    
+    }
     void SequenceCapture(Vector3 center, float radius, int segments) 
     {
         float inc = 2 * Mathf.PI / segments;
@@ -35,7 +43,25 @@ public class Texcorder : MonoBehaviour
         SaveTexture(CombineTextures(_captureResults.ToArray()), "CaptureData", Name);
         _captureResults.Clear();
         ObjectToCapture.transform.eulerAngles = initialEuler;
+    }
+    IEnumerator SequenceCapture(Vector3 center, float radius, int segments, float timeBetweenCapture) 
+    {
+        float inc = 2 * Mathf.PI / segments;
 
+        Vector3 initialEuler = ObjectToCapture.transform.eulerAngles;
+        Vector3 euler = ObjectToCapture.transform.eulerAngles;
+        for (int i = 0; i < segments; i++)
+        {
+            float theta = i * inc;
+
+            ObjectToCapture.transform.eulerAngles = new Vector3(euler.x, euler.y + theta * Mathf.Rad2Deg, euler.z);
+            RenderContent();
+            yield return new WaitForSeconds(timeBetweenCapture) ;
+        }
+
+        SaveTexture(CombineTextures(_captureResults.ToArray()), "CaptureData", Name);
+        _captureResults.Clear();
+        ObjectToCapture.transform.eulerAngles = initialEuler;
     }
     void RenderContent() 
     {

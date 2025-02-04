@@ -5,6 +5,7 @@ Shader "Custom/Billboard"
         _Normal("Normal", 2D) = "bump"{}
         _Albedo("Albedo", 2D) = "Black"{}
         _ARMA("ARMA", 2D) = "black"{}
+
     }
         SubShader
     {

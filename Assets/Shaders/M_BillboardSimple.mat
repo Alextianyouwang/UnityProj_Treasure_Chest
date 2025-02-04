@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_BillboardSingle
+  m_Name: M_BillboardSimple
   m_Shader: {fileID: 4800000, guid: 6aa8203f971f855409c7416deb8e0321, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,19 +24,15 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _ARMA:
-        m_Texture: {fileID: 2800000, guid: c1e103f76c330fa479052427ef5c6975, type: 3}
+        m_Texture: {fileID: 2800000, guid: 6db350fe3fae753458c1d4b32280b4be, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Albedo:
-        m_Texture: {fileID: 2800000, guid: 9c35b334eafb682478cbe439203155f5, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Depth:
-        m_Texture: {fileID: 2800000, guid: f77d0504a2d2e6b42bc00d8e06599f9a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0b3ab4a5b7a990e4e944432e5b93afa2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal:
-        m_Texture: {fileID: 2800000, guid: 0e7154a9de7a4b547810739c377032c6, type: 3}
+        m_Texture: {fileID: 2800000, guid: da0d4429fc5de1543a467e7cccf8ae6a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
