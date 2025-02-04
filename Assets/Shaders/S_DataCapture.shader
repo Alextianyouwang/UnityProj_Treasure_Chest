@@ -87,19 +87,6 @@ Shader "Utility/S_DataCapture"
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
                 float3 posWS = i.positionWS;
                 float3 viewDirWS = normalize( _WorldSpaceCameraPos - posWS);
                 float3 lightDirWS =  GetMainLight().direction;
@@ -127,7 +114,7 @@ Shader "Utility/S_DataCapture"
 
       
 #if _DISPLAY_NORMAL
-
+         return float4 (normalWS, 1);
                 return float4 ((normalWS + 1) * 0.5, 1);
 #elif _DISPLAY_ALBEDO
                 return float4 (albedo, 1);

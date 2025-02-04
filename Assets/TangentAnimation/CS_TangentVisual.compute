@@ -1,0 +1,33 @@
+
+#pragma kernel CSMain
+
+
+struct InstanceData
+{
+    float3 _pos;
+    float3 _dir;
+};
+
+StructuredBuffer<InstanceData> _StartBuffer;
+StructuredBuffer<InstanceData> _EndBuffer;
+RWStructuredBuffer<InstanceData> _AnimBuffer;
+
+uint _TotalInstance;
+float _Lerp;
+
+[numthreads(64,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    float gradient = (float) (id.x / (float) _TotalInstance);
+    float remap = _Lerp * 1.4 - 0.2;
+    float wave = smoothstep(remap - 0.2, remap + 0.2, gradient);
+  //  wave = step(_Lerp, gradient);
+   // wave = _Lerp;
+    InstanceData start = _StartBuffer[id.x];
+    InstanceData end = _EndBuffer[id.x];
+    
+    InstanceData anim;
+    anim._pos = lerp(start._pos, end._pos, wave);
+    anim._dir = lerp(start._dir, end._dir, wave);
+    _AnimBuffer[id.x] = anim;
+}
