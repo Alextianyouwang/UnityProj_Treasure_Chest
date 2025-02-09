@@ -236,6 +236,7 @@ void AlignToGroundNormal(float3 groundNormal, float3 pivot, inout float3 positio
     tangent = mul(alignmentMatrix, tangent);
 }
 
+
 // Function to compute the quaternion rotation
 float4 ComputeQuaternionRotation(float3 from, float3 to)
 {

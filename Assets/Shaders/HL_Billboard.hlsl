@@ -57,8 +57,8 @@ float4 frag(Interpolator i) : SV_Target
     
     
     
-   //normalOS = -mul(UNITY_MATRIX_V, float4(normalOS, 0));
-    normalOS = -TransformWithAlignment(float4(normalOS, 0), float3(0, 0, 1),normalize(float3(viewDirectionWS.x, 0, viewDirectionWS.z))).xyz;
+  //normalOS = -mul(UNITY_MATRIX_V, float4(normalOS, 0));
+   normalOS = - TransformWithAlignment(float4(normalOS, 0), float3(0, 0, 1),normalize(float3(viewDirectionWS.x, 0, viewDirectionWS.z))).xyz;
 
     
     

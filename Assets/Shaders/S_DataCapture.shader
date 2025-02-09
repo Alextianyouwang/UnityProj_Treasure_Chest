@@ -26,7 +26,43 @@ Shader "Utility/S_DataCapture"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
             TEXTURE2D(_Normal); SAMPLER(sampler_Normal);
-            TEXTURE2D(_Albedo); SAMPLER(sampler_Albedo);
+
+            TEXTURE2D(_Albedo); SAMPLER(sampler_Albedo); float4 _Albedo_ST;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             TEXTURE2D(_ARMA); SAMPLER(sampler_ARMA);
 
             struct Input 
@@ -80,6 +116,27 @@ Shader "Utility/S_DataCapture"
                 float NdotL = dot(GetMainLight().direction, normalWS);
 
                 float3 albedo = SAMPLE_TEXTURE2D(_Albedo, sampler_Albedo, i.uv).xyz;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 float4 ARMA = SAMPLE_TEXTURE2D(_ARMA, sampler_ARMA, i.uv);
 
 

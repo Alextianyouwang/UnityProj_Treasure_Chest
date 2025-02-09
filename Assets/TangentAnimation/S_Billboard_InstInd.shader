@@ -1,4 +1,4 @@
-Shader "Procedural/S_Billboard_InstInd"
+﻿Shader "Procedural/S_Billboard_InstInd"
 {
     Properties
     {
@@ -6,6 +6,7 @@ Shader "Procedural/S_Billboard_InstInd"
 
         _MasterScale("MasterScale", Range(0,1)) = 1
 
+        _ViewNormalBlend("_ViewNormalBlend", Range(0,1)) = 1
     }
     SubShader
     {

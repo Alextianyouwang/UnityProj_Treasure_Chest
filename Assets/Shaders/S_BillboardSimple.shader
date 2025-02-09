@@ -20,13 +20,13 @@ Shader "Custom/Billboard_Simple"
       
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             TEXTURE2D(_Albedo); SAMPLER(sampler_Albedo);
-
             struct Input
             {
                 float3 positionOS : POSITION;
                 float4 uv : TEXCOORD0;
                 float4 custom :TEXCOORD1;
             };
+
             
             struct Interpolator
             {
@@ -54,6 +54,22 @@ Shader "Custom/Billboard_Simple"
                 return albedo;
             }
 
+            ENDHLSL
+        }
+      Pass
+        {
+            Name "ShadowCaster"
+            Tags {"LightMode" = "ShadowCaster"}
+            ColorMask 0
+            HLSLPROGRAM
+        
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma target 2.0
+            #define SHADOW_CASTER_PASS
+        
+
+            #include "./HL_Billboard.hlsl"
             ENDHLSL
         }
     }  
