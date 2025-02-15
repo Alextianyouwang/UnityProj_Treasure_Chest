@@ -6,6 +6,7 @@
             #include "../INCLUDE/HL_ShadowHelper.hlsl"
             #include "../INCLUDE/HL_Quaternion.hlsl"
             #include "../INCLUDE/HL_GraphicsHelper.hlsl"
+            #include "../INCLUDE/HL_OctavePerlin.hlsl"
 
             TEXTURE2D(_Normal); SAMPLER(sampler_Normal);
             TEXTURE2D(_Albedo); SAMPLER(sampler_Albedo);
@@ -27,6 +28,25 @@ struct Interpolator
 
 };
 
+float _Radius;
+float3 _Center;
+float4 _RingColor;
+
+float SphereicalMask(float3 position, float smooth, out float3 color)
+{
+    float dist = distance(position, _Center);
+    float sphereMask = 1 - smoothstep(_Radius - smooth, _Radius + smooth, dist);
+    float noise = OctaveNoise(position * 0.6, 78.233, 5, 0.5, 1.8) * 0.5 + 0.5;
+    float edgeWidth = 0.1;
+    float lowerEdeg = noise - edgeWidth < 0 ? 0 : noise - edgeWidth;
+    float upperEdge = noise + edgeWidth > 1 ? 1 : noise + edgeWidth;
+    float ringEdge = smoothstep(lowerEdeg, noise, sphereMask);
+    float ringEdgeBot = smoothstep(noise,upperEdge, sphereMask);
+    color = _RingColor.xyz * (ringEdge - ringEdgeBot);
+    return smoothstep(upperEdge, lowerEdeg, sphereMask);
+
+}
+
 Interpolator vert(Input i)
 {
     Interpolator o;
@@ -45,7 +65,7 @@ Interpolator vert(Input i)
 float4 frag(Interpolator i) : SV_Target
 {
     float4 albedo = SAMPLE_TEXTURE2D(_Albedo, sampler_Albedo, i.uv);
-    clip(albedo.w - 0.0001);
+   // clip(albedo.w - 0.0001);
     #ifdef SHADOW_CASTER_PASS
         clip(albedo.w - 0.0001);
         return 0;
@@ -84,7 +104,7 @@ float4 frag(Interpolator i) : SV_Target
     surf.smoothness = MADS.w;
     surf.occlusion = MADS.y;
     surf.alpha = albedo.w;
-    clip(albedo.w - 0.5);
+
     half4 color = UniversalFragmentPBR(
 					data,
 					albedo.xyz,
@@ -95,7 +115,11 @@ float4 frag(Interpolator i) : SV_Target
 					0, // Emission
 					 albedo.w // Alpha
                     );
-
+    
+    float3 ringColor;
+    color = lerp( color,float4(0.5, 0.5, 0.5, 1) ,SphereicalMask(i.positionWS, 2, ringColor));
+     clip(color.w - 0.5);
+    color.xyz += ringColor;
     return color;
     
     #endif

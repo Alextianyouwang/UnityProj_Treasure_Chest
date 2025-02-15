@@ -6,6 +6,10 @@ Shader "Custom/Billboard"
         _Albedo("Albedo", 2D) = "Black"{}
         _ARMA("ARMA", 2D) = "black"{}
 
+        _Radius("Radius", Float) = 0
+        _Center("Center", Vector) = (0,0,0,0)
+       [HDR]_RingColor("_RingColor", Color) = (1,0,0,1)
+
     }
         SubShader
     {

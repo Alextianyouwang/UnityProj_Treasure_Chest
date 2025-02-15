@@ -27,6 +27,7 @@ Shader "Custom/Billboard_Simple"
                 float4 custom :TEXCOORD1;
             };
 
+          //  RWStructuredBuffer<float3> _Test;
             
             struct Interpolator
             {
@@ -39,7 +40,8 @@ Shader "Custom/Billboard_Simple"
             Interpolator vert(Input i)
             {
                 Interpolator o;
-                o.positionCS = mul(UNITY_MATRIX_MVP, float4(i.positionOS, 1));
+               // o.positionCS = mul (UNITY_MATRIX_MVP, float4(i.positionOS + _Test[0], 1));
+               o.positionCS = mul(UNITY_MATRIX_MVP, float4(i.positionOS, 1));
                 o.uv = i.uv;
                 o.custom = i.custom;
                 return o;
