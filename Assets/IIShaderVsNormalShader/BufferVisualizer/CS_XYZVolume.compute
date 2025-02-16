@@ -18,19 +18,35 @@ uint _Dimension, _MaxCount;
 float3 _BotLeft;
 float _Increment;
 float3 _Offset;
+float _Lerp;
+int _IndexOffset;
 
 #pragma kernel Formation
 [numthreads(64, 1, 1)]
 void Formation(uint3 id : SV_DispatchThreadID)
 {
    
-    if (id.x >= _MaxCount)
-        return;
+   //if (id.x >= _MaxCount)
+   //    return;
     uint x = (id.x / _Dimension) % _Dimension;
     uint z = id.x % _Dimension;
     uint y = id.x / (_Dimension * _Dimension);
+    
 
-    _PositionBuffer[id.x] = _BotLeft + float3(x,y,z) * _Increment + _Offset;
+    
+    float percent = (float) id.x / ((float) _MaxCount + _IndexOffset);
+    uint next = id.x + _IndexOffset;
+    next %= _MaxCount + _IndexOffset;
+    uint x1 = (next / _Dimension) % _Dimension;
+    uint z1 = next % _Dimension;
+    uint y1 = next / (_Dimension * _Dimension);
+    
+    float smooth = smoothstep(_Lerp,_Lerp + 0.5f, percent);
+
+    float3 pureXYZ = lerp(float3(x1, y1, z1)
+    ,float3(x, y, z), smooth);
+
+    _PositionBuffer[id.x] = _BotLeft + pureXYZ * _Increment + _Offset;
 
 }
 
