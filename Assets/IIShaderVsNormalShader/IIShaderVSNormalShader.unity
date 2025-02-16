@@ -387,7 +387,7 @@ Transform:
   m_GameObject: {fileID: 3343957531097961766}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.23, y: 0, z: -9.37}
+  m_LocalPosition: {x: 3.77, y: 0, z: -7.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -409,7 +409,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &3343957531097961767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,6 +424,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Mesh: {fileID: -127844609115117539, guid: f48a1b3e05cf7d94f9ec9b272c050643, type: 3}
   Material: {fileID: 2100000, guid: b7e781406046dcb4a828f3bf9f4cec67, type: 2}
+  Compute: {fileID: 7200000, guid: a5023a0b23c633c4489098f2f55998fc, type: 3}
 --- !u!4 &4384650934841264315
 Transform:
   m_ObjectHideFlags: 0
@@ -456,7 +457,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &4787123772682558337
 MeshRenderer:
   m_ObjectHideFlags: 0
