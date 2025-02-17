@@ -25,6 +25,7 @@ struct VertexOutput
     float4 tangentWS : TEXCOORD3;
     float3 positionWS : TEXCOORD4;
     float3 bakedGI : TEXCOORD8;
+    float4 mask : TEXCOORD5;
 };
 ////////////////////////////////////////////////
 // Spawn Data
@@ -47,6 +48,7 @@ Texture2D<float> _InteractionTexture;
 Texture2D<float4> _FlowTexture;
 int _NumTilePerClusterSide;
 float _ClusterBotLeftX, _ClusterBotLeftY, _TileSize;
+float _Lerp,_Lerp2,_Lerp3;
 ////////////////////////////////////////////////
 
 TEXTURE2D( _MainTex);SAMPLER (sampler_MainTex);float4 _MainTex_ST;
@@ -67,6 +69,7 @@ VertexOutput vert(VertexInput v, uint instanceID : SV_INSTANCEID)
     int y = (spawnPosWS.z - _ClusterBotLeftY) / _TileSize;
     // Sample Buffers Based on xy
     float3 groundNormalWS = _GroundNormalBuffer[x * _NumTilePerClusterSide + y];
+    float4 mask = _MaskBuffer[x * _NumTilePerClusterSide + y];
     float rand = _SpawnBuffer[instanceID].hash * 2 - 1; // [-1,1]
  
     float3 posOS = v.positionOS;
@@ -75,8 +78,8 @@ VertexOutput vert(VertexInput v, uint instanceID : SV_INSTANCEID)
    
     // Apply Transform
 
-    float xRot = 15;
-    float zRot = 15;
+    float xRot = 15 * _Lerp3;
+    float zRot = 15 * _Lerp3;
     float3 posWS = spawnPosWS + posOS * _MasterScale ;
     
 
@@ -84,11 +87,12 @@ VertexOutput vert(VertexInput v, uint instanceID : SV_INSTANCEID)
     float3 normalWS = v.normalOS;
     float4 tangentWS = v.tangentOS;
     
-    posWS = RotateAroundAxis(float4(posWS, 1), float3(0, 1, 0), rand * 360, spawnPosWS).xyz;
-    normalWS = RotateAroundAxis(float4(normalWS, 0), float3(0, 1, 0), rand * 360).xyz;
-    tangentWS.xyz = RotateAroundAxis(float4(tangentWS.xyz, 0), float3(0, 1, 0), rand * 360).xyz;
+    posWS = RotateAroundAxis(float4(posWS, 1), float3(0, 1, 0), lerp(0,rand * 360,_Lerp2), spawnPosWS).xyz;
+    normalWS = RotateAroundAxis(float4(normalWS, 0), float3(0, 1, 0), lerp(0, rand * 360, _Lerp2)).xyz;
+    tangentWS.xyz = RotateAroundAxis(float4(tangentWS.xyz, 0), float3(0, 1, 0), lerp(0, rand * 360, _Lerp2)).xyz;
     
-    AlignToGroundNormal(groundNormalWS,spawnPosWS, posWS, normalWS, tangentWS.xyz);
+    AlignToGroundNormal(lerp(float3(0,1,0),groundNormalWS,_Lerp), spawnPosWS, posWS, normalWS, tangentWS.xyz);
+    
     
     posWS = RotateAroundAxis(float4(posWS, 1), float3(1, 0, 0), rand * xRot, spawnPosWS).xyz;
     posWS = RotateAroundAxis(float4(posWS, 1), float3(0, 0, 1), rand * zRot, spawnPosWS).xyz;
@@ -118,6 +122,7 @@ VertexOutput vert(VertexInput v, uint instanceID : SV_INSTANCEID)
     o.normalWS = normalWS;
     o.tangentWS = tangentWS;
     o.groundNormalWS = groundNormalWS;
+    o.mask = mask;
 
     #ifdef SHADOW_CASTER_PASS
         o.positionCS = CalculatePositionCSWithShadowCasterLogic(posWS,normalWS);
@@ -222,6 +227,9 @@ float4 frag(VertexOutput v, bool frontFace : SV_IsFrontFace) : SV_Target
     
     float4 finalColor =  UniversalFragmentPBR(data, surf);
     //finalColor.xyz += customSSS;
+    
+    //return (1 - v.mask.y) * float4(normalWS * 0.5 + 0.5, 1) +  v.mask.y * albedo;
+    return (1 - v.mask.y) * albedo + v.mask.y * finalColor;
     return finalColor;
 
    

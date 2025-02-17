@@ -45,7 +45,8 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     float randOriginal = rand2dTo1d(posXZOriginal + _Time);
     
     float sphereMask = SphericalMask(float3(posXZOriginal.x, 0, posXZOriginal.y), _Center, _Radius, _Falloff);
-    sphereMask = step(randOriginal,sphereMask - 0.01);
+    sphereMask = step(randOriginal * 0.5 + 0.5, sphereMask);
+
     _MaskBuffer[id.x] = float4(step(_Step,rand), sphereMask, 0, 0);
 
 }

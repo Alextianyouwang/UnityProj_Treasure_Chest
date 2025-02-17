@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Arrow
   m_EditorClassIdentifier: 
   SpawnMesh:
-  - {fileID: -7912334918279119621, guid: 9749e3b5c97164749850772b43dc8141, type: 3}
-  - {fileID: -7912334918279119621, guid: 9749e3b5c97164749850772b43dc8141, type: 3}
-  - {fileID: -7912334918279119621, guid: 9749e3b5c97164749850772b43dc8141, type: 3}
-  SpawnMeshMaterial: {fileID: 2100000, guid: 1f417365b17104a4d8d29c72203017f8, type: 2}
+  - {fileID: 6099800089077584851, guid: 9164bcc945101bd438e79a5b439b8230, type: 3}
+  - {fileID: 6099800089077584851, guid: 9164bcc945101bd438e79a5b439b8230, type: 3}
+  - {fileID: 6099800089077584851, guid: 9164bcc945101bd438e79a5b439b8230, type: 3}
+  SpawnMeshMaterial: {fileID: 2100000, guid: b9c39f5c0d4b06b459888841a9c69c02, type: 2}
   DensityMap: {fileID: 2800000, guid: a92e9a0aee2fc5a45996b3dc7e0bc70d, type: 3}
   SquaredInstancePerTile: 2
   SquaredChunksPerCluster: 8

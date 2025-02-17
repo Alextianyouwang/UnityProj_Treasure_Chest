@@ -7,6 +7,9 @@ Shader "Procedural/S_Tile_PBR"
         _Mask("Mask", 2D) = "black"{}
 
         _MasterScale("MasterScale",Range(0,1)) = 1
+        _Lerp("_Lerp", Range(0,1)) = 1
+        _Lerp2("_Lerp2", Range(0,1)) = 1
+        _Lerp3("_Lerp3", Range(0,1)) = 1
     }
     SubShader
     {
