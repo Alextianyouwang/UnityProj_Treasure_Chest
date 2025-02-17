@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MAT_Buffer_Visual_INST
+  m_Name: MAT_Buffer_Visual_INST 1
   m_Shader: {fileID: 4800000, guid: 3e021d0c37e008d4d94ffacecb69fe41, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -29,8 +29,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Lerp: 0
-    - _Scale: 0.88
+    - _Lerp: 1
+    - _Scale: 0.78
     m_Colors:
-    - _Tint: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
+    - _Tint: {r: 1, g: 0.77254903, b: 0.22352941, a: 1}
   m_BuildTextureStacks: []

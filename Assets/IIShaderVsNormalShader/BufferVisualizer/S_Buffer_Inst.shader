@@ -5,6 +5,7 @@ Shader "Custom/SimpleUnlit_Opaque_Scale"
         _Albedo("Albedo", 2D) = "Black"{}
         _Tint("Tint",Color) = (0,1,0,1)
         _Scale("Scale",Range(0,1)) = 0.5
+        _Lerp("Lerp",Range(0,1)) = 0
     }
     SubShader
     {
@@ -14,6 +15,16 @@ Shader "Custom/SimpleUnlit_Opaque_Scale"
                  #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
 
+            float3 _EffectCenter;
+            float _Lerp;
+
+             float MoveUp(float3 pos) 
+            {
+                  float dist = distance(pos, _EffectCenter);
+
+                  return 1 - smoothstep(0,5, dist);
+            }
+            
         ENDHLSL
         Pass
         {
@@ -30,6 +41,7 @@ Shader "Custom/SimpleUnlit_Opaque_Scale"
             StructuredBuffer<float3> _PositionBuffer;
             float4 _Tint;
             float _Scale;
+
             struct Input
             {
                 float3 positionOS : POSITION;
@@ -47,14 +59,16 @@ Shader "Custom/SimpleUnlit_Opaque_Scale"
                float3 bakedGI : TEXCOORD3;
 
             };
-            
+
+  
             Interpolator vert(Input i)
             {
                 Interpolator o;
-                float3 worldPos = mul (UNITY_MATRIX_M, float4 (i.positionOS,1)) ;
-                
-                worldPos = _PositionBuffer[i.id] + i.positionOS * _Scale;
+                float3 worldPos= _PositionBuffer[i.id] + i.positionOS * _Scale;
                 o.positionWS = worldPos;
+                 worldPos.y += lerp (0,MoveUp(_PositionBuffer[i.id]),_Lerp)* 5;
+                 
+                 o.positionWS = worldPos;
                 o.positionCS = mul(UNITY_MATRIX_VP, float4(worldPos, 1));
                 o.uv = i.uv;
                 o.normalWS = i.normalOS;
@@ -124,14 +138,15 @@ Shader "Custom/SimpleUnlit_Opaque_Scale"
             {
                 float4 positionCS : SV_POSITION;
             };
+
             
             Interpolator vert(Input i)
             {
                 Interpolator o;
-                float3 worldPos = mul (UNITY_MATRIX_M, float4 (i.positionOS,1)) ;
-                
-                worldPos = _PositionBuffer[i.id] + i.positionOS * _Scale;
+                float3 worldPos = _PositionBuffer[i.id] + i.positionOS * _Scale;
+                  worldPos.y += lerp (0,MoveUp(_PositionBuffer[i.id]),_Lerp)* 5;
                 o.positionCS =  CalculatePositionCSWithShadowCasterLogic(worldPos, i.normalOS);
+                  //o.positionCS = mul(UNITY_MATRIX_VP, float4(worldPos, 1));
                 return o;
             }
             
