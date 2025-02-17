@@ -15,12 +15,15 @@ public class SimpleRenderer2 : MonoBehaviour
     private ComputeBuffer _cb_position;
 
     public int MaxCount = 10000;
-    private int _accum_amount;
+    private int _accum_amount, _startAmount;
     [Range(0, 1)]
     public float Lerp;
 
+    private bool _canShiftAnimate = true;
+
     private void OnEnable()
     {
+        _startAmount = MaxCount;
         _compute_inst = Instantiate(Compute);
         Initialize();
 
@@ -40,6 +43,7 @@ public class SimpleRenderer2 : MonoBehaviour
         _compute_inst.SetVector("_Offset", Offset);
         _compute_inst.SetFloat("_Lerp", 0);
         _accum_amount = MaxCount;
+
     }
     [Button]
     public void ShiftIndex()
@@ -54,17 +58,30 @@ public class SimpleRenderer2 : MonoBehaviour
     [Button]
     public void SetShiftIndex(int value)
     {
+        _canShiftAnimate = true;
         StartCoroutine(ShiftIndex(value, 0.5f,null));
     }
     [Button]
-    public void StopShitIndex()
+    public void StopShiftIndex()
     {
-        StopAllCoroutines();
+        _canShiftAnimate = false;
+    }
+
+    [Button]
+    public void ResetObject()
+    {
+        StartCoroutine(ShiftIndex( _startAmount - _accum_amount, 0.5f, null));
     }
     private IEnumerator ShiftIndex(int amount, float duration, Action OnNext) 
     {
         float time = 0;
         _accum_amount += amount;
+        if (!_canShiftAnimate) 
+        {
+            StopAllCoroutines();
+            yield break;
+
+        }
         while (time < duration) 
         {
             float percentage = time / duration;
