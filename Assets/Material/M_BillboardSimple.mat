@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_BillboardSimple
-  m_Shader: {fileID: 4800000, guid: 6aa8203f971f855409c7416deb8e0321, type: 3}
+  m_Shader: {fileID: 4800000, guid: b8a84aab6ee831b48a4132e6ad6b6b05, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -75,10 +75,12 @@ Material:
     - _Metallic: 0
     - _Mode: 1
     - _Radius: 10000
+    - _Scale: 1
     - _SoftParticlesEnabled: 0
     - _SoftParticlesFarFadeDistance: 1
     - _SoftParticlesNearFadeDistance: 0
     - _SrcBlend: 1
+    - _USE_CHUNKID_ON: 0
     - _ZWrite: 1
     m_Colors:
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}

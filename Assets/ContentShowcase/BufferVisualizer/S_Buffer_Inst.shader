@@ -22,7 +22,7 @@ Shader "Custom/SimpleUnlit_Opaque_Scale"
             {
                   float dist = distance(pos, _EffectCenter);
 
-                  return 1 - smoothstep(0,5, dist);
+                  return 1 - smoothstep(0,10, dist);
             }
             
         ENDHLSL
@@ -64,9 +64,12 @@ Shader "Custom/SimpleUnlit_Opaque_Scale"
             Interpolator vert(Input i)
             {
                 Interpolator o;
-                float3 worldPos= _PositionBuffer[i.id] + i.positionOS * _Scale;
+                       float3 spawnPos =       _PositionBuffer[i.id];
+                      // spawnPos +=normalize(spawnPos- _EffectCenter) * lerp (0.7,MoveUp(_PositionBuffer[i.id]),_Lerp)* 5;
+
+                float3 worldPos= spawnPos + i.positionOS * _Scale;
                 o.positionWS = worldPos;
-                 worldPos.y += lerp (0,MoveUp(_PositionBuffer[i.id]),_Lerp)* 5;
+                 //worldPos.y += lerp (0,MoveUp(_PositionBuffer[i.id]),_Lerp)* 5;
                  
                  o.positionWS = worldPos;
                 o.positionCS = mul(UNITY_MATRIX_VP, float4(worldPos, 1));
@@ -143,8 +146,12 @@ Shader "Custom/SimpleUnlit_Opaque_Scale"
             Interpolator vert(Input i)
             {
                 Interpolator o;
-                float3 worldPos = _PositionBuffer[i.id] + i.positionOS * _Scale;
-                  worldPos.y += lerp (0,MoveUp(_PositionBuffer[i.id]),_Lerp)* 5;
+                                                   float3 spawnPos =       _PositionBuffer[i.id];
+                     // spawnPos +=normalize(spawnPos- _EffectCenter) * lerp (0.7,MoveUp(_PositionBuffer[i.id]),_Lerp)* 5;
+
+                float3 worldPos= spawnPos + i.positionOS * _Scale;
+                 // worldPos.y += lerp (0,MoveUp(_PositionBuffer[i.id]),_Lerp)* 5;
+      
                 o.positionCS =  CalculatePositionCSWithShadowCasterLogic(worldPos, i.normalOS);
                   //o.positionCS = mul(UNITY_MATRIX_VP, float4(worldPos, 1));
                 return o;

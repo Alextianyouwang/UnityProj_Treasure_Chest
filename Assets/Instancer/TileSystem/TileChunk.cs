@@ -216,12 +216,12 @@ public class TileChunk
             _mpb.SetColor("_LOD_Color", Color.yellow);
 
         }
-        /*for (int i = 0; i < _spawnMesh.Length; i++)
-        {
-            uint[] data = new uint[5];
-            _argsBuffer[i].GetData(data);
-            instanceCount += (int)data[1];
-        }*/
+      // for (int i = 0; i < _spawnMesh.Length; i++)
+      // {
+      //     uint[] data = new uint[5];
+      //     _argsBuffer[i].GetData(data);
+      //     instanceCount += (int)data[1];
+      // }
 
     }
 

@@ -1,4 +1,4 @@
-Shader "Custom/SimpleUnlit"
+Shader "Custom/SimpleUnlit_InstInd"
 {
     Properties
     {
@@ -9,8 +9,6 @@ Shader "Custom/SimpleUnlit"
         Tags {"RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline"}
         Pass
         {
-            Name "ForwardLit"
-            Tags {"LightMode" = "UniversalForward"}
             HLSLPROGRAM
             #pragma target 2.0
             #pragma vertex vert
@@ -22,7 +20,7 @@ Shader "Custom/SimpleUnlit"
             {
                 float3 positionOS : POSITION;
                 float4 uv : TEXCOORD0;
-                uint id : SV_InstanceID;
+                uint id :SV_InstanceID;
             };
             
             struct Interpolator
@@ -34,10 +32,7 @@ Shader "Custom/SimpleUnlit"
             Interpolator vert(Input i)
             {
                 Interpolator o;
-                float3 worldPos = mul (UNITY_MATRIX_M, float4 (i.positionOS,1)) ;
-                
-                worldPos = _PositionBuffer[i.id] + i.positionOS;
-                o.positionCS = mul(UNITY_MATRIX_VP, float4(worldPos, 1));
+                o.positionCS = mul(UNITY_MATRIX_VP, float4(i.positionOS + _PositionBuffer[i.id], 1));
                 o.uv = i.uv;
                 return o;
             }
@@ -52,5 +47,3 @@ Shader "Custom/SimpleUnlit"
         }
     }  
 }
-    
-

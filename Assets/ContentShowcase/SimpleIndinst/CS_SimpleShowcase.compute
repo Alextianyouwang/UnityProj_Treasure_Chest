@@ -50,7 +50,7 @@ void Formation(uint3 id : SV_DispatchThreadID)
     uint z = id.x % _Dimension;
     float2 xz = float2(x * _Increment + _BotLeft.x, z * _Increment + _BotLeft.z);
     float noise = unity_gradientNoise(xz);
-    _PositionBuffer[id.x] = _BotLeft + float3(xz.x, noise * 3, xz.y);
+    _PositionBuffer[id.x] = float3(xz.x, _BotLeft.y + noise * 3, xz.y);
 
 }
 

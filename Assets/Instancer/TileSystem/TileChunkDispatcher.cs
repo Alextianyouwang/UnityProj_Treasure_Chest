@@ -151,7 +151,7 @@ public class TileChunkDispatcher
                     t.SetZTex(_zTex_external);
                     t.DrawContent(ref totalInstance);
                 }
-        //Debug.Log(totalInstance);
+        //Debug.Log("Total Instance Drawn: " + totalInstance);
     }
     public void ReleaseBuffer()
     {

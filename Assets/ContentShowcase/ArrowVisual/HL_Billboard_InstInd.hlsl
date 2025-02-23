@@ -4,9 +4,9 @@
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 //#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
-#include "../INCLUDE/HL_GraphicsHelper.hlsl"
-#include "../INCLUDE/HL_Noise.hlsl"
-#include "../INCLUDE/HL_ShadowHelper.hlsl"
+#include "../../INCLUDE/HL_GraphicsHelper.hlsl"
+#include "../../INCLUDE/HL_Noise.hlsl"
+#include "../../INCLUDE/HL_ShadowHelper.hlsl"
 
 struct VertexInput
 {

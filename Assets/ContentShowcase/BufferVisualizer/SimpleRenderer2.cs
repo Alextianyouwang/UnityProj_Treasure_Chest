@@ -14,7 +14,7 @@ public class SimpleRenderer2 : MonoBehaviour
     private ComputeBuffer _cb_args;
     private ComputeBuffer _cb_position;
 
-    public int MaxCount = 10000;
+    public int MaxCount = 100000;
     private int _accum_amount, _startAmount;
     [Range(0, 1)]
     public float Lerp;
@@ -101,6 +101,8 @@ public class SimpleRenderer2 : MonoBehaviour
 
     private void LateUpdate()
     {
+       //_compute_inst.SetFloat("_Lerp", Lerp);
+       //_cb_args.SetData(new uint[] { Mesh.GetIndexCount(0), (uint)( MaxCount * Lerp) + 1, Mesh.GetIndexStart(0), Mesh.GetBaseVertex(0), 0 });
         _compute_inst .SetVector("_BotLeft", transform.position);
         _compute_inst.Dispatch(1,Mathf.CeilToInt(MaxCount / 64f), 1, 1);
         Graphics.DrawMeshInstancedIndirect(Mesh, 0, Material, new Bounds(Vector3.zero, Vector3.one * 10101f), _cb_args,0,null,

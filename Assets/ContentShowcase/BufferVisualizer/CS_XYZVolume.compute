@@ -41,12 +41,14 @@ void Formation(uint3 id : SV_DispatchThreadID)
     uint z1 = next % _Dimension;
     uint y1 = next / (_Dimension * _Dimension);
     
-    float smooth = smoothstep(_Lerp,_Lerp + 0.5f, percent);
+    float smooth = smoothstep(_Lerp,_Lerp + 0.3f, percent);
 
     float3 pureXYZ = lerp(float3(x1, y1, z1)
     ,float3(x, y, z), smooth);
+    
 
     _PositionBuffer[id.x] = _BotLeft + pureXYZ * _Increment + _Offset;
+   // _PositionBuffer[id.x] = _BotLeft + float3(x,y,z) + _Offset;
 
 }
 

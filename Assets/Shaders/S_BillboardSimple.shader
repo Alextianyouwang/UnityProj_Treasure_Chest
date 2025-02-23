@@ -26,8 +26,6 @@ Shader "Custom/Billboard_Simple"
                 float4 uv : TEXCOORD0;
                 float4 custom :TEXCOORD1;
             };
-
-            RWStructuredBuffer<float3> _InstancePosition;
             
             struct Interpolator
             {
@@ -40,9 +38,7 @@ Shader "Custom/Billboard_Simple"
             Interpolator vert(Input i, uint id: SV_InstanceID)
             {
                 Interpolator o;
-               // o.positionCS = mul (UNITY_MATRIX_MVP, float4(i.positionOS + _Test[0], 1));
                o.positionCS = mul(UNITY_MATRIX_MVP, float4(i.positionOS, 1));
-               //o.positionCS = float4 (i.positionOS,1);
                 o.uv = i.uv;
                 o.custom = i.custom;
                 return o;
@@ -52,8 +48,6 @@ Shader "Custom/Billboard_Simple"
             {
                 half4 albedo = SAMPLE_TEXTURE2D(_Albedo, sampler_Albedo, i.uv.xy);
                 clip(albedo.w - 0.0001);
-
-                return i.uv;
                 return albedo;
             }
 
