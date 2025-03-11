@@ -89,7 +89,7 @@ Shader "Custom/SimpleUnlit_Opaque_Scale"
                 albedo.a = 0.1;
                 albedo *= _Tint;
                 albedo *= mainLight.shadowAttenuation;
- 
+                return i.normalWS.xyzz;
                 return mainLight.color.xyzz * mainLight.shadowAttenuation * mainLight.distanceAttenuation* _Tint + i.bakedGI.xyzz;
             }
 

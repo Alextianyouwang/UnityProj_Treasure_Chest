@@ -57,7 +57,8 @@ VertexOutput vert(VertexInput v, uint instanceID : SV_InstanceID)
     float3 groundNormalWS = _GroundNormalBuffer[x * _NumTilePerClusterSide + y];
     float3 spawnDir = normalize( groundNormalWS);
     float length = distance(float2(spawnDir.x, spawnDir.z),0);
-    float3 posOS = v.positionOS * length * 1.5 ;
+    float3 posOS = v.positionOS;
+   // posOS *= length * 1.5 ;
     float3 viewDirectionWS = normalize(_WorldSpaceCameraPos - spawnPosWS);
     //viewDirectionWS.y = -viewDirectionWS.y;
     float3 newSpawnDir = lerp(normalize(spawnDir), viewDirectionWS, _ViewNormalBlend);
